@@ -1,0 +1,6 @@
+{
+  "name": "Parchment Shoot Workspace",
+  "description": "A professional shoot operating system and document release manager for photographers and models. Generate, sign, and manage legal releases and contracts offline-first with custom branding, QR codes, and multi-language support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

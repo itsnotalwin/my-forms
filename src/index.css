@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom Palette */
+  --color-oatmeal: #faf6f0;
+  --color-espresso: #272421;
+  --color-sand: #e6dac6;
+  --color-cocoa: #121110;
+  --color-cocoa-surface: #1a1817;
+  --color-cocoa-surface-light: #242120;
+  --color-alabaster: #fcfaf7;
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+/* Print Styles for clean agreements */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Custom styles for canvas signature pad */
+.signature-canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
