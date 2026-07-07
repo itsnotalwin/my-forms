@@ -24,9 +24,9 @@
 
 /* Print Styles for clean agreements */
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
   }
   .no-print {
     display: none !important;
@@ -34,11 +34,25 @@
   .print-only {
     display: block !important;
   }
+  /* Ensure absolute contrast and override dark-theme background colors */
+  .print-card, 
+  .print-card * {
+    color: #000000 !important;
+    background-color: transparent !important;
+    border-color: #e5e7eb !important; /* light gray for borders in print */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
   .print-card {
     border: none !important;
-    box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* High contrast for printing barcode/QR */
+  .print-card svg {
+    color: #000000 !important;
   }
 }
 
