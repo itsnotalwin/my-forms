@@ -97,13 +97,6 @@ export default function PrintPreview({
         }`}
         style={{ fontFamily: 'Georgia, serif' }} // Editorial/Legal Serif mood for the document itself!
       >
-        {/* Verification stamp on document (Web preview only) */}
-        <div className="absolute top-8 right-8 border-2 border-dashed border-emerald-500/40 text-emerald-500 rounded-lg p-3 rotate-12 flex flex-col items-center gap-0.5 no-print select-none max-w-[140px] text-center">
-          <ShieldCheck className="w-6 h-6 stroke-[1.5]" />
-          <span className="font-mono text-[9px] font-bold uppercase tracking-wider">Parchment Verified</span>
-          <span className="font-mono text-[8px] opacity-75">{agreement.verificationCode}</span>
-        </div>
-
         {/* Studio / Photographer Header */}
         <div className="border-b-2 border-sand pb-6 mb-8 flex flex-col sm:flex-row justify-between items-start gap-6 font-sans">
           
@@ -158,45 +151,16 @@ export default function PrintPreview({
             </div>
           </div>
           
-          {/* Print-Visible Embedded QR Code and Record details */}
+          {/* Print-Visible Clean Record details (No QR code) */}
           <div className="flex flex-col sm:items-end gap-3 font-sans self-stretch sm:self-start">
-            <div className="flex items-center gap-4 self-end">
-              {/* Dynamic QR Code Verification Stamp */}
-              <div className="p-1.5 bg-white border border-sand rounded-lg shrink-0 flex flex-col items-center shadow-xs">
-                <svg className="w-16 h-16 text-espresso" viewBox="0 0 100 100">
-                  {/* Outer corners */}
-                  <path d="M5,5 h30 v30 h-30 z M15,15 h10 v10 h-10 z" fill="currentColor" />
-                  <path d="M65,5 h30 v30 h-30 z M75,15 h10 v10 h-10 z" fill="currentColor" />
-                  <path d="M5,65 h30 v30 h-30 z M15,75 h10 v10 h-10 z" fill="currentColor" />
-                  
-                  {/* Mock QR details */}
-                  <rect x="45" y="5" width="8" height="8" fill="currentColor" />
-                  <rect x="55" y="15" width="6" height="6" fill="currentColor" />
-                  <rect x="45" y="25" width="12" height="6" fill="currentColor" />
-                  <rect x="45" y="45" width="10" height="10" fill="currentColor" />
-                  <rect x="5" y="45" width="8" height="12" fill="currentColor" />
-                  <rect x="25" y="45" width="12" height="8" fill="currentColor" />
-                  
-                  <rect x="65" y="45" width="12" height="12" fill="currentColor" />
-                  <rect x="85" y="45" width="10" height="8" fill="currentColor" />
-                  <rect x="75" y="60" width="8" height="14" fill="currentColor" />
-                  
-                  <rect x="45" y="65" width="12" height="6" fill="currentColor" />
-                  <rect x="55" y="75" width="14" height="8" fill="currentColor" />
-                  <rect x="45" y="85" width="8" height="10" fill="currentColor" />
-                  <rect x="65" y="85" width="30" height="8" fill="currentColor" />
-                </svg>
-                <span className="font-mono text-[8px] font-bold tracking-widest mt-1 text-center text-espresso">{agreement.verificationCode}</span>
+            <div className="text-left sm:text-right space-y-1 font-mono text-[10px]">
+              <div className="bg-espresso text-oatmeal px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[8px] inline-block mb-1">
+                OFFICIAL DOCUMENT
               </div>
-
-              <div className="text-right space-y-1 font-mono text-[10px]">
-                <div className="bg-espresso text-oatmeal px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[8px] inline-block mb-1">
-                  OFFICIAL RECORD
-                </div>
-                <p className="opacity-70">DATE OF ISSUE: {formatDate(agreement.createdAt)}</p>
-                <p className="opacity-70">JURISDICTION: South Africa</p>
-                <p className="opacity-70 font-semibold text-emerald-600">STATUS: VERIFIED SEALED</p>
-              </div>
+              <p className="opacity-70"><span className="font-bold">DOCUMENT ID:</span> {agreement.verificationCode}</p>
+              <p className="opacity-70"><span className="font-bold">DATE OF ISSUE:</span> {formatDate(agreement.createdAt)}</p>
+              <p className="opacity-70"><span className="font-bold">JURISDICTION:</span> South Africa</p>
+              <p className="opacity-70 font-semibold text-espresso"><span className="font-bold">STATUS:</span> READY FOR PHYSICAL SIGNING</p>
             </div>
           </div>
         </div>
@@ -210,47 +174,50 @@ export default function PrintPreview({
         </div>
 
         {/* Signatures Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-sans">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 font-sans mt-8 pt-4">
           {/* Photographer Signature Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-wider font-bold opacity-60 border-b border-sand pb-1.5">Photographer Signature</h4>
+          <div className="space-y-4">
+            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2">Photographer Signature</h4>
             
-            <div className="h-20 flex items-center justify-center border border-dashed border-sand/30 bg-[#faf6f0]/30 rounded-lg p-2 overflow-hidden max-w-[280px]">
-              {agreement.photographerSignature ? (
-                <img src={agreement.photographerSignature} alt="Photographer Signature" className="max-h-full max-w-full opacity-90 mix-blend-multiply" />
-              ) : (
-                <span className="text-xs text-red-500 italic">Signature Pending</span>
-              )}
+            <div className="pt-10 space-y-4">
+              <div className="border-b border-espresso/40 pb-1.5">
+                <span className="text-[10px] text-espresso/60 block font-mono">Principal Photographer Signature:</span>
+                <div className="h-8"></div> {/* Space for physical ink signature */}
+              </div>
+              <div className="border-b border-espresso/40 pb-1.5">
+                <span className="text-[10px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
+              </div>
             </div>
 
-            <div className="space-y-1 text-xs">
+            <div className="space-y-1 text-xs pt-2">
               <p className="font-semibold">{userProfile.photographerName}</p>
-              <p className="opacity-60 text-[10px]">Title: Principal Photographer</p>
-              <p className="opacity-60 text-[10px]">Date Signed: {agreement.photographerSignedAt ? formatDate(agreement.photographerSignedAt) : 'Pending'}</p>
+              <p className="opacity-65 text-[10px]">Title: Principal Photographer</p>
+              <p className="opacity-65 text-[10px]">Company: {userProfile.companyName}</p>
             </div>
           </div>
 
           {/* Model / Guardian Signature Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-wider font-bold opacity-60 border-b border-sand pb-1.5">Model / Guardian Signature</h4>
+          <div className="space-y-4">
+            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2">Model / Guardian Signature</h4>
             
-            <div className="h-20 flex items-center justify-center border border-dashed border-sand/30 bg-[#faf6f0]/30 rounded-lg p-2 overflow-hidden max-w-[280px]">
-              {agreement.guardianSignature || agreement.modelSignature ? (
-                <img src={agreement.guardianSignature || agreement.modelSignature} alt="Signatory Signature" className="max-h-full max-w-full opacity-90 mix-blend-multiply" />
-              ) : (
-                <span className="text-xs text-red-500 italic">Signature Pending</span>
-              )}
+            <div className="pt-10 space-y-4">
+              <div className="border-b border-espresso/40 pb-1.5">
+                <span className="text-[10px] text-espresso/60 block font-mono">Authorized Signatory / Model Signature:</span>
+                <div className="h-8"></div> {/* Space for physical ink signature */}
+              </div>
+              <div className="border-b border-espresso/40 pb-1.5">
+                <span className="text-[10px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
+              </div>
             </div>
 
-            <div className="space-y-1 text-xs">
+            <div className="space-y-1 text-xs pt-2">
               <p className="font-semibold">{agreement.guardianName ? `${agreement.guardianName} (Guardian)` : shoot.modelName}</p>
               {agreement.guardianName && (
-                <p className="opacity-60 text-[10px]">Relationship to Minor ({shoot.modelName}): {agreement.guardianRelationship}</p>
+                <p className="opacity-65 text-[10px]">Relationship to Minor ({shoot.modelName}): {agreement.guardianRelationship}</p>
               )}
               {agreement.guardianId && (
-                <p className="opacity-60 text-[10px]">SA ID No: {agreement.guardianId}</p>
+                <p className="opacity-65 text-[10px]">SA ID No: {agreement.guardianId}</p>
               )}
-              <p className="opacity-60 text-[10px]">Date Signed: {agreement.modelSignedAt ? formatDate(agreement.modelSignedAt) : 'Pending'}</p>
             </div>
           </div>
         </div>
@@ -258,18 +225,18 @@ export default function PrintPreview({
         {/* Footer Verification Section */}
         <div className="mt-12 pt-6 border-t border-dashed border-sand/60 grid grid-cols-1 md:grid-cols-3 gap-4 items-center font-sans text-xs opacity-65">
           <div className="flex flex-col gap-1">
-            <p className="font-bold">Cryptographic Stamp</p>
+            <p className="font-bold">Document Serial ID</p>
             <p className="font-mono text-[9px] break-all">{agreement.securityHash}</p>
           </div>
           
-          <div className="text-center font-mono text-[10px] uppercase tracking-widest text-emerald-600 font-semibold border-y md:border-y-0 md:border-x border-sand/40 py-2">
-            INTEGRITY VERIFIED SECURE
+          <div className="text-center font-mono text-[10px] uppercase tracking-widest text-espresso font-semibold border-y md:border-y-0 md:border-x border-sand/40 py-2">
+            SHUTTERHAUS PRINT MASTER
           </div>
 
           <div className="text-left md:text-right space-y-1 text-[10px]">
-            <p className="font-bold">South African Digital Archive</p>
+            <p className="font-bold">South African Legal Registry</p>
             <p>Verification Code: <strong>{agreement.verificationCode}</strong></p>
-            <p className="text-[9px] opacity-75">Verification URL: parchment.co.za/verify/{agreement.verificationCode}</p>
+            <p className="text-[9px] opacity-75">Verification URL: shutterhaus.co.za/verify/{agreement.verificationCode}</p>
           </div>
         </div>
       </div>

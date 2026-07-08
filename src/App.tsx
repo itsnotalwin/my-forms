@@ -35,7 +35,8 @@ import {
   Undo,
   Upload,
   Info,
-  Printer
+  Printer,
+  Trash2
 } from 'lucide-react';
 
 import { Contact, Shoot, Agreement, UserProfile, AuditLog } from './types';
@@ -199,15 +200,15 @@ export default function App() {
 
   // Sync to Local Storage
   useEffect(() => {
-    if (shoots.length > 0) localStorage.setItem('parchment_shoots', JSON.stringify(shoots));
+    localStorage.setItem('parchment_shoots', JSON.stringify(shoots));
   }, [shoots]);
 
   useEffect(() => {
-    if (agreements.length > 0) localStorage.setItem('parchment_agreements', JSON.stringify(agreements));
+    localStorage.setItem('parchment_agreements', JSON.stringify(agreements));
   }, [agreements]);
 
   useEffect(() => {
-    if (contacts.length > 0) localStorage.setItem('parchment_contacts', JSON.stringify(contacts));
+    localStorage.setItem('parchment_contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   useEffect(() => {
@@ -215,7 +216,7 @@ export default function App() {
   }, [userProfile]);
 
   useEffect(() => {
-    if (auditLogs.length > 0) localStorage.setItem('parchment_logs', JSON.stringify(auditLogs));
+    localStorage.setItem('parchment_logs', JSON.stringify(auditLogs));
   }, [auditLogs]);
 
   useEffect(() => {
@@ -323,6 +324,17 @@ export default function App() {
     setNewContactGuardianId('');
     setNewContactNotes('');
     setIsCreatingContact(false);
+  };
+
+  // Delete Contact Handler
+  const handleDeleteContact = (id: string) => {
+    const contactToDelete = contacts.find(c => c.id === id);
+    if (!contactToDelete) return;
+    
+    if (confirm(`⚠️ Are you sure you want to delete ${contactToDelete.type === 'model' ? 'model' : 'client'} "${contactToDelete.name}"?`)) {
+      setContacts(prev => prev.filter(c => c.id !== id));
+      addAuditLog('Contact Deleted', `${contactToDelete.type === 'model' ? 'Model' : 'Client'} contact deleted: ${contactToDelete.name}`);
+    }
   };
 
   // Create Shoot Handler
@@ -1121,18 +1133,18 @@ export default function App() {
                           </div>
 
                           {/* Print and Export Buttons */}
-                          {currentAgreement.modelSigned && currentAgreement.photographerSigned && (
-                            <div className="flex gap-2 pt-2 border-t border-dashed border-sand/30">
+                          {currentAgreement && (
+                            <div className="flex gap-2 pt-3 border-t border-dashed border-sand/30">
                               <button
                                 type="button"
                                 id="btn-print-doc"
                                 onClick={() => setSelectedAgreementIdForPrint(currentAgreement.id)}
-                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all hover:scale-[1.01] ${
-                                  isDarkMode ? 'bg-sand text-cocoa' : 'bg-espresso text-oatmeal'
+                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all hover:scale-[1.01] cursor-pointer shadow-sm ${
+                                  isDarkMode ? 'bg-sand text-cocoa hover:bg-alabaster' : 'bg-espresso text-oatmeal hover:bg-espresso/90'
                                 }`}
                               >
-                                <Printer className="w-4 h-4" />
-                                Print Official Certified Agreement
+                                <Printer className="w-4 h-4 text-amber-400" />
+                                Print Contract / Save as PDF (Ready for Hand Signing)
                               </button>
                             </div>
                           )}
@@ -1746,8 +1758,16 @@ export default function App() {
                               )}
                             </div>
 
-                            <div className="border-t border-sand/20 pt-4 text-[10px] opacity-50 font-mono">
-                              Registered on: {formatDate(contact.createdAt)}
+                            <div className="border-t border-sand/20 pt-4 flex justify-between items-center text-[10px] opacity-70 font-mono">
+                              <span>Registered on: {formatDate(contact.createdAt)}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteContact(contact.id)}
+                                className="flex items-center gap-1 text-red-500 hover:text-red-400 font-sans font-bold cursor-pointer transition-all"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Delete
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -1947,31 +1967,48 @@ export default function App() {
                         isDarkMode ? 'bg-cocoa-surface border-espresso' : 'bg-white border-sand'
                       }`}>
                         <h4 className="font-display font-semibold text-xs text-sand">Database Maintenance</h4>
-                        <div className="flex gap-2">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ shoots, agreements, contacts, auditLogs }));
+                                const dlAnchorElem = document.createElement('a');
+                                dlAnchorElem.setAttribute("href", dataStr);
+                                dlAnchorElem.setAttribute("download", "parchment_backup.json");
+                                dlAnchorElem.click();
+                              }}
+                              className={`flex-1 py-1.5 rounded text-[10px] font-bold border ${
+                                isDarkMode ? 'border-espresso bg-cocoa-surface-light hover:text-sand' : 'border-sand bg-oatmeal hover:bg-sand/30'
+                              }`}
+                            >
+                              Export Backup
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (confirm("⚠️ Are you sure you want to completely reset the local photography database? This is irreversible.")) {
+                                  localStorage.clear();
+                                  window.location.reload();
+                                }
+                              }}
+                              className="flex-1 py-1.5 rounded text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
+                            >
+                              Factory Reset
+                            </button>
+                          </div>
+
                           <button
+                            type="button"
                             onClick={() => {
-                              const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ shoots, agreements, contacts, auditLogs }));
-                              const dlAnchorElem = document.createElement('a');
-                              dlAnchorElem.setAttribute("href", dataStr);
-                              dlAnchorElem.setAttribute("download", "parchment_backup.json");
-                              dlAnchorElem.click();
-                            }}
-                            className={`flex-1 py-1.5 rounded text-[10px] font-bold border ${
-                              isDarkMode ? 'border-espresso bg-cocoa-surface-light hover:text-sand' : 'border-sand bg-oatmeal hover:bg-sand/30'
-                            }`}
-                          >
-                            Export Backup
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (confirm("⚠️ Are you sure you want to completely reset the local photography database? This is irreversible.")) {
-                                localStorage.clear();
-                                window.location.reload();
+                              if (confirm("🧹 Are you sure you want to clear all demo data? This will delete all shoots, agreements, and contacts so you can start with a completely clean, custom slate.")) {
+                                setShoots([]);
+                                setAgreements([]);
+                                setContacts([]);
+                                setAuditLogs([]);
                               }
                             }}
-                            className="flex-1 py-1.5 rounded text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
+                            className="w-full py-1.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20 cursor-pointer transition-all"
                           >
-                            Factory Reset
+                            Clear Demo Data (Blank Slate)
                           </button>
                         </div>
                       </div>
