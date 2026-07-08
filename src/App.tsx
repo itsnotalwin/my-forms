@@ -296,7 +296,7 @@ export default function App() {
   // Add Contact Handler
   const handleAddContact = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newContactName.trim() || !newContactEmail.trim()) return;
+    if (!newContactName.trim()) return;
 
     const newContact: Contact = {
       id: 'C-' + generateId(),
@@ -2131,10 +2131,9 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="text-xs block font-semibold mb-1">Email Address</label>
+                  <label className="text-xs block font-semibold mb-1">Email Address <span className="text-[10px] font-normal opacity-60">(Optional)</span></label>
                   <input
                     type="email"
-                    required
                     value={newContactEmail}
                     onChange={(e) => setNewContactEmail(e.target.value)}
                     placeholder="email@example.co.za"
@@ -2145,7 +2144,7 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="text-xs block font-semibold mb-1">Phone Number</label>
+                  <label className="text-xs block font-semibold mb-1">Phone Number <span className="text-[10px] font-normal opacity-60">(Optional)</span></label>
                   <input
                     type="text"
                     value={newContactPhone}

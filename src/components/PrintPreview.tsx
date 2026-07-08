@@ -98,7 +98,7 @@ export default function PrintPreview({
         style={{ fontFamily: 'Georgia, serif' }} // Editorial/Legal Serif mood for the document itself!
       >
         {/* Studio / Photographer Header */}
-        <div className="border-b-2 border-sand pb-6 mb-8 flex flex-col sm:flex-row justify-between items-start gap-6 font-sans">
+        <div className="border-b-2 border-sand pb-6 print:pb-4 mb-8 print:mb-5 flex flex-col sm:flex-row justify-between items-start gap-6 print:gap-4 font-sans">
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             {/* Interactive Logo Upload & Display Area */}
@@ -140,21 +140,21 @@ export default function PrintPreview({
             )}
 
             <div className="space-y-1">
-              <h1 className="font-display font-bold text-xl tracking-tight uppercase" style={{ fontFamily: 'var(--font-display)' }}>
+              <h1 className="font-display font-bold text-xl print:text-lg tracking-tight uppercase" style={{ fontFamily: 'var(--font-display)' }}>
                 {userProfile.companyName || userProfile.photographerName}
               </h1>
-              <p className="text-xs opacity-75">{userProfile.address}</p>
-              <p className="text-xs opacity-75">Phone: {userProfile.phone} • Email: {userProfile.email}</p>
+              <p className="text-xs print:text-[10px] opacity-75">{userProfile.address}</p>
+              <p className="text-xs print:text-[10px] opacity-75">Phone: {userProfile.phone} • Email: {userProfile.email}</p>
               {userProfile.registrationNumber && (
-                <p className="text-[10px] opacity-50 font-mono">Reg No: {userProfile.registrationNumber}</p>
+                <p className="text-[10px] print:text-[8px] opacity-50 font-mono">Reg No: {userProfile.registrationNumber}</p>
               )}
             </div>
           </div>
           
           {/* Print-Visible Clean Record details (No QR code) */}
           <div className="flex flex-col sm:items-end gap-3 font-sans self-stretch sm:self-start">
-            <div className="text-left sm:text-right space-y-1 font-mono text-[10px]">
-              <div className="bg-espresso text-oatmeal px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[8px] inline-block mb-1">
+            <div className="text-left sm:text-right space-y-1 font-mono text-[10px] print:text-[9px]">
+              <div className="bg-espresso text-oatmeal px-2 print:px-1.5 py-0.5 rounded font-bold uppercase tracking-wider text-[8px] inline-block mb-1">
                 OFFICIAL DOCUMENT
               </div>
               <p className="opacity-70"><span className="font-bold">DOCUMENT ID:</span> {agreement.verificationCode}</p>
@@ -166,7 +166,7 @@ export default function PrintPreview({
         </div>
 
         {/* Agreement Text Area */}
-        <div className="space-y-6 leading-relaxed text-sm text-justify whitespace-pre-line border-b border-sand pb-8 mb-8 animate-fadeIn" style={{ color: '#1a1817' }}>
+        <div className="space-y-5 print:space-y-3.5 leading-relaxed print:leading-normal text-sm print:text-[11px] text-justify whitespace-pre-line border-b border-sand pb-8 print:pb-5 mb-8 print:mb-5 animate-fadeIn" style={{ color: '#1a1817' }}>
           {/* Note: In print layout, we want highly clear, elegant black text, even if parent page is in dark mode */}
           <div className="print-black-text">
             {agreement.content}
@@ -174,69 +174,69 @@ export default function PrintPreview({
         </div>
 
         {/* Signatures Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 font-sans mt-8 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-12 print:gap-8 font-sans mt-8 print:mt-4 pt-4 print:pt-2 print-avoid-break">
           {/* Photographer Signature Column */}
-          <div className="space-y-4">
-            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2">Photographer Signature</h4>
+          <div className="space-y-4 print:space-y-3">
+            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2 print:pb-1">Photographer Signature</h4>
             
-            <div className="pt-10 space-y-4">
-              <div className="border-b border-espresso/40 pb-1.5">
-                <span className="text-[10px] text-espresso/60 block font-mono">Principal Photographer Signature:</span>
-                <div className="h-8"></div> {/* Space for physical ink signature */}
+            <div className="pt-8 print:pt-4 space-y-4 print:space-y-2">
+              <div className="border-b border-espresso/40 pb-1.5 print:pb-1">
+                <span className="text-[10px] print:text-[9px] text-espresso/60 block font-mono">Principal Photographer Signature:</span>
+                <div className="h-8 print:h-6"></div> {/* Space for physical ink signature */}
               </div>
-              <div className="border-b border-espresso/40 pb-1.5">
-                <span className="text-[10px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
+              <div className="border-b border-espresso/40 pb-1.5 print:pb-1">
+                <span className="text-[10px] print:text-[9px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
               </div>
             </div>
 
-            <div className="space-y-1 text-xs pt-2">
+            <div className="space-y-1 text-xs pt-2 print:pt-1">
               <p className="font-semibold">{userProfile.photographerName}</p>
-              <p className="opacity-65 text-[10px]">Title: Principal Photographer</p>
-              <p className="opacity-65 text-[10px]">Company: {userProfile.companyName}</p>
+              <p className="opacity-65 text-[10px] print:text-[9px]">Title: Principal Photographer</p>
+              <p className="opacity-65 text-[10px] print:text-[9px]">Company: {userProfile.companyName}</p>
             </div>
           </div>
 
           {/* Model / Guardian Signature Column */}
-          <div className="space-y-4">
-            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2">Model / Guardian Signature</h4>
+          <div className="space-y-4 print:space-y-3">
+            <h4 className="text-xs uppercase tracking-wider font-bold opacity-70 border-b border-sand pb-2 print:pb-1">Model / Guardian Signature</h4>
             
-            <div className="pt-10 space-y-4">
-              <div className="border-b border-espresso/40 pb-1.5">
-                <span className="text-[10px] text-espresso/60 block font-mono">Authorized Signatory / Model Signature:</span>
-                <div className="h-8"></div> {/* Space for physical ink signature */}
+            <div className="pt-8 print:pt-4 space-y-4 print:space-y-2">
+              <div className="border-b border-espresso/40 pb-1.5 print:pb-1">
+                <span className="text-[10px] print:text-[9px] text-espresso/60 block font-mono">Authorized Signatory / Model Signature:</span>
+                <div className="h-8 print:h-6"></div> {/* Space for physical ink signature */}
               </div>
-              <div className="border-b border-espresso/40 pb-1.5">
-                <span className="text-[10px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
+              <div className="border-b border-espresso/40 pb-1.5 print:pb-1">
+                <span className="text-[10px] print:text-[9px] text-espresso/60 block font-mono">Date Signed: _____________________________________</span>
               </div>
             </div>
 
-            <div className="space-y-1 text-xs pt-2">
+            <div className="space-y-1 text-xs pt-2 print:pt-1">
               <p className="font-semibold">{agreement.guardianName ? `${agreement.guardianName} (Guardian)` : shoot.modelName}</p>
               {agreement.guardianName && (
-                <p className="opacity-65 text-[10px]">Relationship to Minor ({shoot.modelName}): {agreement.guardianRelationship}</p>
+                <p className="opacity-65 text-[10px] print:text-[9px]">Relationship to Minor ({shoot.modelName}): {agreement.guardianRelationship}</p>
               )}
               {agreement.guardianId && (
-                <p className="opacity-65 text-[10px]">SA ID No: {agreement.guardianId}</p>
+                <p className="opacity-65 text-[10px] print:text-[9px]">SA ID No: {agreement.guardianId}</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Footer Verification Section */}
-        <div className="mt-12 pt-6 border-t border-dashed border-sand/60 grid grid-cols-1 md:grid-cols-3 gap-4 items-center font-sans text-xs opacity-65">
+        <div className="mt-12 print:mt-6 pt-6 print:pt-3 border-t border-dashed border-sand/60 grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 print:gap-2 items-center font-sans text-xs print:text-[10px] opacity-65 print-avoid-break">
           <div className="flex flex-col gap-1">
-            <p className="font-bold">Document Serial ID</p>
-            <p className="font-mono text-[9px] break-all">{agreement.securityHash}</p>
+            <p className="font-bold print:text-[9px]">Document Serial ID</p>
+            <p className="font-mono text-[9px] print:text-[8px] break-all">{agreement.securityHash}</p>
           </div>
           
-          <div className="text-center font-mono text-[10px] uppercase tracking-widest text-espresso font-semibold border-y md:border-y-0 md:border-x border-sand/40 py-2">
+          <div className="text-center font-mono text-[10px] print:text-[8px] uppercase tracking-widest text-espresso font-semibold border-y md:border-y-0 md:border-x border-sand/40 py-2 print:py-1">
             SHUTTERHAUS PRINT MASTER
           </div>
 
-          <div className="text-left md:text-right space-y-1 text-[10px]">
+          <div className="text-left md:text-right print:text-right space-y-1 text-[10px] print:text-[8px]">
             <p className="font-bold">South African Legal Registry</p>
             <p>Verification Code: <strong>{agreement.verificationCode}</strong></p>
-            <p className="text-[9px] opacity-75">Verification URL: shutterhaus.co.za/verify/{agreement.verificationCode}</p>
+            <p className="text-[9px] print:text-[8px] opacity-75">Verification URL: shutterhaus.co.za/verify/{agreement.verificationCode}</p>
           </div>
         </div>
       </div>

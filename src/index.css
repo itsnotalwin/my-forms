@@ -24,6 +24,11 @@
 
 /* Print Styles for clean agreements */
 @media print {
+  @page {
+    size: A4;
+    margin: 1.2cm 1.4cm;
+  }
+  
   html, body {
     background: #ffffff !important;
     color: #000000 !important;
@@ -49,6 +54,11 @@
     margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+  }
+  /* Prevent page breaks inside critical layout sections */
+  .print-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
   /* High contrast for printing barcode/QR */
   .print-card svg {
